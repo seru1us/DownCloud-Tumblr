@@ -12,8 +12,8 @@ reddit = praw.Reddit(client_id=praw_client_id,
                      user_agent=praw_user_agent,
                      username=praw_username)
 
-#subarg = reddit.subreddit(sys.argv[1])
-subarg = "badwomensanatomy"
+subarg = reddit.subreddit(sys.argv[1])
+#subarg = "badwomensanatomy"
 
 slash = '/'
 underscore = '_'
