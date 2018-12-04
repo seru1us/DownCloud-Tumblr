@@ -3,8 +3,8 @@ import praw
 import subprocess
 import sys
 import urllib.request
+import runpy
 from api_info import *
-from tpvr_proxy import * 
 
 reddit = praw.Reddit(client_id=praw_client_id,
                      client_secret=praw_client_secret,
@@ -43,16 +43,10 @@ for submission in reddit.subreddit(str(subarg)).search(f'site:tumblr.com nsfw:{p
         # Saves this into the "Single Images" folder, with the title the submission title.
         urllib.request.urlretrieve(cdn_url, os.path.join(subarg + '/Single Images', submission.title))
     else:
-        print("not a cdn link")
-
-    dalink = slash.join(submission.url.split(slash)[:3])
-
-    try:
-        directory = submission.secure_media['oembed']['author_name']
-    except Exception:
-        directory = dalink.split(slash)[-1]
-
-    odirectory = directory.strip() + '/%(title)s.%(ext)s'
-
+        # so it isn't a link to a pic. Grab the blog name and pass it to the script
+        del sys.argv[0]
+        sys.argv = ['', (submission.url.split('/')[2]).split('.')[0]]
+        runpy.run_path('./tumblr-crawler/tumblr-photo-video-ripper.py', run_name='__main__')
+        
 
 
