@@ -5,8 +5,6 @@ praw_client_secret='YOUR_SECRET',
 praw_password='YOUR_PASS',
 praw_user_agent='/u/will_work_for_twerk is one handsome fool',
 praw_username='YOUR_USER'
-# change below to 'no' if you don't want to include nsfw
-praw_sub_nsfw='yes'
 
 # This will save all of the *.media.tumblr.com links into an "uncategorized" folder,
 # because there is no way to see which page the direct links correspond to.
