@@ -48,14 +48,25 @@ for submission in reddit.subreddit(strarg).search(f'site:tumblr.com', sort='rele
         except:
             print("This title is not formatted well, not saving this image.")
     else:
-        # so it isn't a link to a pic. Grab the blog name and pass it to the script, after setting the working directory
-        # to the folder that matches the Subreddit name.
-        os.chdir(strarg)
-        del sys.argv[0]
-        sys.argv = ['', (submission.url.split('/')[2]).split('.')[0]]
-        runpy.run_path('../tumblr-crawler/tumblr-photo-video-ripper.py', run_name='__main__')
-        os.chdir(resetcwd)
 
+        # so it isn't a link to a pic. Grab the blog name and pass it to the scripts
+        blog_name = (submission.url.split('/')[2]).split('.')[0]
         
+        # Check to make sure we haven't downloaded it from a different sub.
+        if blog_name in open('blog_dl_history').read():
+            print("Blog found in history, not downloading again.")
+            open('blog_dl_history').close()
+        else:
+            # set the working directory to the folder that matches the Subreddit name before running tpvr.
+            os.chdir(strarg)
+            del sys.argv[0]
+            sys.argv = ['', blog_name]
+            runpy.run_path('../tumblr-crawler/tumblr-photo-video-ripper.py', run_name='__main__')
+            os.chdir(resetcwd)
 
-
+            # Record the blog name to disk. Since we are using dynamic directories, we need to manually check to make sure we aren't
+            # downloading a blog twice.
+            open('blog_dl_history').close()
+            f = open('blog_dl_history', 'a')
+            f.write(blog_name + "\n")
+            f.close()
