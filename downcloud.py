@@ -2,6 +2,7 @@ import os
 import praw
 import subprocess
 import sys
+import urllib.request
 from api_info import *
 
 reddit = praw.Reddit(client_id=praw_client_id,
@@ -11,13 +12,39 @@ reddit = praw.Reddit(client_id=praw_client_id,
                      username=praw_username)
 
 #subarg = reddit.subreddit(sys.argv[1])
-subarg = "futurefunk"
+subarg = "badwomensanatomy"
 
-slash = "/"
+slash = '/'
+underscore = '_'
+period = '.'
 
-for submission in reddit.subreddit(str(subarg)).search('site:soundcloud.com', limit=None):
-    dalink = slash.join(submission.url.split(slash)[:4])
-    print(dalink)
+# for what it's worth, there is probably a better way to do all of this split/join nonsense.
+
+if not os.path.exists(subarg):
+    os.makedirs(subarg)
+    print('Artist ' + subarg + ' not found, creating...')
+else:
+    print('Artist ' + subarg + ' already exists, skipping...')
+
+if not os.path.exists(subarg + '/Single Images'):
+    os.makedirs(subarg + '/Single Images')
+    print('Artist ' + subarg + '/Single Images not found, creating...')
+else:
+    print('Artist ' + subarg + '/Single Images already exists, skipping...')
+
+# search the sub for tumblr related links.
+for submission in reddit.subreddit(str(subarg)).search(f'site:tumblr.com nsfw:{praw_sub_nsfw}', limit=None):
+
+    # save "only iamges" if we want to. 
+    if "media" in slash.join(submission.url.split(slash)[:3]) and save_cdn_only_links:
+        # take the url and force the highest resolution (this is kinda dirty).
+        cdn_url = underscore.join(submission.url.split('_')[:-1]) + '_1280.' + period.join(submission.url.split('.')[-1:])
+        # Saves this into the "Single Images" folder, with the title the submission title.
+        urllib.request.urlretrieve(cdn_url, os.path.join(subarg + '/Single Images', submission.title))
+    else:
+        print("not a cdn link")
+
+    dalink = slash.join(submission.url.split(slash)[:3])
 
     try:
         directory = submission.secure_media['oembed']['author_name']
@@ -26,16 +53,5 @@ for submission in reddit.subreddit(str(subarg)).search('site:soundcloud.com', li
 
     odirectory = directory.strip() + '/%(title)s.%(ext)s'
 
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'outtmpl': odirectory,
-        'ignoreerrors': True
 
-    }
-
-    if not os.path.exists(directory):
-        #os.makedirs(directory)
-        print('Artist ' + directory + ' already exists, skipping...')
-    else:
-        print('Artist ' + directory + ' already exists, skipping...')
 
