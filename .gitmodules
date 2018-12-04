@@ -1,0 +1,3 @@
+[submodule "tumblr-crawler"]
+	path = tumblr-crawler
+	url = https://github.com/seru1us/tumblr-crawler

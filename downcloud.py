@@ -4,6 +4,7 @@ import subprocess
 import sys
 import urllib.request
 from api_info import *
+from tumblr-crawler import tumblr-photo-video-ripper
 
 reddit = praw.Reddit(client_id=praw_client_id,
                      client_secret=praw_client_secret,
