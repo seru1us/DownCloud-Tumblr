@@ -14,7 +14,7 @@ reddit = praw.Reddit(client_id=praw_client_id,
 
 subarg = reddit.subreddit(sys.argv[1])
 strarg = str(subarg)
-
+resetcwd = str(os.getcwd())
 
 slash = '/'
 underscore = '_'
@@ -48,10 +48,14 @@ for submission in reddit.subreddit(strarg).search(f'site:tumblr.com', sort='rele
         except:
             print("This title is not formatted well, not saving this image.")
     else:
-        # so it isn't a link to a pic. Grab the blog name and pass it to the script
+        # so it isn't a link to a pic. Grab the blog name and pass it to the script, after setting the working directory
+        # to the folder that matches the Subreddit name.
+        os.chdir(strarg)
         del sys.argv[0]
         sys.argv = ['', (submission.url.split('/')[2]).split('.')[0]]
-        runpy.run_path('./tumblr-crawler/tumblr-photo-video-ripper.py', run_name='__main__')
+        runpy.run_path('../tumblr-crawler/tumblr-photo-video-ripper.py', run_name='__main__')
+        os.chdir(resetcwd)
+
         
 
 
