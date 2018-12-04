@@ -2,15 +2,16 @@ import os
 import praw
 import subprocess
 import sys
-import youtube_dl
+from api_info import *
 
-reddit = praw.Reddit(client_id='YOUR_CLIENT ID',
-                     client_secret='YOUR_SECRET',
-                     password='YOUR_PASS',
-                     user_agent='/u/will_work_for_twerk is a sexy b',
-                     username='YOUR_USER')
+reddit = praw.Reddit(client_id=praw_client_id,
+                     client_secret=praw_client_secret,
+                     password=praw_password,
+                     user_agent=praw_user_agent,
+                     username=praw_username)
 
-subarg = reddit.subreddit(sys.argv[1])
+#subarg = reddit.subreddit(sys.argv[1])
+subarg = "futurefunk"
 
 slash = "/"
 
@@ -33,9 +34,8 @@ for submission in reddit.subreddit(str(subarg)).search('site:soundcloud.com', li
     }
 
     if not os.path.exists(directory):
-        os.makedirs(directory)
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([dalink])
+        #os.makedirs(directory)
+        print('Artist ' + directory + ' already exists, skipping...')
     else:
         print('Artist ' + directory + ' already exists, skipping...')
 

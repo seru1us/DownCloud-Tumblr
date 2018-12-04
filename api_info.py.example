@@ -1,0 +1,7 @@
+# for Praw:
+
+praw_client_id='YOUR_CLIENT ID',
+praw_client_secret='YOUR_SECRET',
+praw_password='YOUR_PASS',
+praw_user_agent='/u/will_work_for_twerk is a sexy b',
+praw_username='YOUR_USER'
