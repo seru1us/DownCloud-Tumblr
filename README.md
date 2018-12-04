@@ -10,6 +10,7 @@ It needs 4 things:
 
 [Reddit API Key](https://github.com/reddit/reddit/wiki/OAuth2)
 
+Put the API stuff in an api_info.py file. Feel free to rename the example I threw in there
 
 Usage:
 ```
