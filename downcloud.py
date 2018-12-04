@@ -12,8 +12,8 @@ reddit = praw.Reddit(client_id=praw_client_id,
                      user_agent=praw_user_agent,
                      username=praw_username)
 
-subarg = reddit.subreddit(sys.argv[1])
-#subarg = "badwomensanatomy"
+#subarg = reddit.subreddit(sys.argv[1])
+subarg = "badwomensanatomy"
 
 slash = '/'
 underscore = '_'
@@ -34,9 +34,10 @@ else:
     print('Artist ' + subarg + '/Single Images already exists, skipping...')
 
 # search the sub for tumblr related links.
-for submission in reddit.subreddit(str(subarg)).search(f'site:tumblr.com nsfw:{praw_sub_nsfw}', limit=None):
+for submission in reddit.subreddit(str(subarg)).search(f'site:tumblr.com nsfw:{praw_sub_nsfw}', sort='relevance', syntax='lucene', time_filter='all', limit=None):
 
-    # save "only iamges" if we want to. 
+    print(submission.url)
+    # save "only images" if we want to. 
     if "media" in slash.join(submission.url.split(slash)[:3]) and save_cdn_only_links:
         # take the url and force the highest resolution (this is kinda dirty).
         cdn_url = underscore.join(submission.url.split('_')[:-1]) + '_1280.' + period.join(submission.url.split('.')[-1:])
