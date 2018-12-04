@@ -2,3 +2,4 @@ api_info.py
 __pycache__/
 *.pyc
 .vscode
+.directory
